@@ -4,6 +4,6 @@ This simple program displays currently available classrooms at UCLA. Classrooms 
 
 This was developed mainly to expirement with the GitHub pages functionality and to learn simple javascript and HTML.
 
-You can find general ucla classroom availability [here](http://www.registrar.ucla.edu/Faculty-Staff/Classrooms-and-Scheduling/Classroom-Grid-Search).
+You can find general UCLA classroom availability [here](http://www.registrar.ucla.edu/Faculty-Staff/Classrooms-and-Scheduling/Classroom-Grid-Search).
 
 You can find the program displayed [here](https://mitchellf.github.io/classrooms/).
