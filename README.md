@@ -1,4 +1,4 @@
-#UCLA Classroom availability
+#UCLA Classroom Availability
 
 This simple program displays currently available classrooms at UCLA. Classrooms displayed are from a small local database within the project files and are added manually. Classrooms available in the next hour are also displayed.
 
