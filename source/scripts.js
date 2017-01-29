@@ -99,11 +99,14 @@ function open_at_time(time, index) {
 //Really lazy and messy set of ifs to output 12 hour time
 current_header = document.getElementById("current_header");
 next_header = document.getElementById("next_header");
-if (current_hour < 11 && current_hour != 0) {
+if (current_hour < 10 && current_hour != 0) {
 	current_header.innerHTML = "Scheduled available now (" + current_hour +
 		":00AM - " + next_hour + ":00 AM)";
 	next_header.innerHTML = "Scheduled available next hour (" + (current_hour+1) +
 		":00AM - " + (next_hour+1) + ":00 AM)";
+} else if (current_hour == 10) {
+	current_header.innerHTML = "Scheduled available now (10:00 AM - 11:00AM)";
+	next_header.innerHTML = "Scheduled available next hour (11:00AM - 12:00PM)";
 } else if (current_hour == 0) {
 	current_header.innerHTML = "Scheduled available now (12:00 AM - 1:00AM)";
 	next_header.innerHTML = "Scheduled available next hour (1:00AM - 2:00AM)";
