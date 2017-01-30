@@ -1,4 +1,3 @@
-document.onload = function() {
 /*
  * classrooms array
  *
@@ -20,7 +19,6 @@ document.onload = function() {
 */
 var classrooms = [
 {building: "MS", room: "5117", times:
-	//S M T W R F Sat
 	[[],[8,15],[],[8,15],[],[8,17],[]]},
 {building: "MS", room: "5118", times:
 	[[],[8,16],[15],[],[],[8,17],[]]},
@@ -51,7 +49,7 @@ var classrooms = [
 var date = new Date();
 var current_day = date.getDay();
 var current_hour = date.getHours();
-var next_hour;
+var next_hour = 0;
 
 //We set next hour to appropriate time.
 if(current_hour != 23) {
@@ -76,9 +74,9 @@ if(current_hour != 23) {
  * If time is after 6PM and before 8AM we return true. Also
  * return true if currentDay is 0 or 6 (sun. or sat.).
 */
-function open_at_time(time, index) {
+function open_at_time(input_time, index) {
 	//If after 6 and before 8 or sun. or sat. return true
-	if((0 <= time && time < 8) || (17 < time && time <=  23) || current_day == 0 ||
+	if(input_time < 8 || 17 < input_time || current_day == 0 ||
 		current_day == 6) {
 		return true;
 	//If classroom has no available times return false
@@ -88,75 +86,73 @@ function open_at_time(time, index) {
 	//If time matches one of the stored times return true
 	//If none of the stored times matches time return false
 	} else {
-		var size = classrooms[index].times[current_day].length;
-		for (i = 0; i < size; i++) {
-			if (time == classrooms[index].times[current_day][i]) {
+		var size_times = classrooms[index].times[current_day].length;
+		for (j = 0; j < size_times; ++j) {
+			if (input_time == classrooms[index].times[current_day][j]) {
 				return true;
 			}
 		}
-		return false;
+	}
+	return false;
+}
+
+window.onload = function() {
+	//Really lazy and messy set of ifs to output 12 hour time
+	var current_header = document.getElementById("current_header");
+	var next_header = document.getElementById("next_header");
+	if (0 < current_hour && current_hour < 10) {
+		current_header.innerHTML = "Scheduled available now (" + current_hour +
+			":00AM - " + next_hour + ":00 AM)";
+		next_header.innerHTML = "Scheduled available next hour (" + (current_hour+1) +
+			":00AM - " + (next_hour+1) + ":00 AM)";
+	} else if (current_hour == 10) {
+		current_header.innerHTML = "Scheduled available now (10:00 AM - 11:00AM)";
+		next_header.innerHTML = "Scheduled available next hour (11:00AM - 12:00PM)";
+	} else if (current_hour == 0) {
+		current_header.innerHTML = "Scheduled available now (12:00 AM - 1:00AM)";
+		next_header.innerHTML = "Scheduled available next hour (1:00AM - 2:00AM)";
+	} else if (current_hour == 11) {
+		current_header.innerHTML = "Scheduled available now (11:00AM - 12:00PM)";
+		next_header.innerHTML = "Scheduled available next hour (12:00PM - 1:00PM)";
+	} else if (current_hour == 12) {
+		current_header.innerHTML = "Scheduled available now (12:00PM - 1:00PM)";
+		next_header.innerHTML = "Scheduled available next hour (1:00PM - 2:00PM)";
+	} else if (12 < current_hour && current_hour < 22) {
+		current_header.innerHTML = "Scheduled available now (" + (current_hour - 12) +
+			":00PM - " + (next_hour -12) + ":00PM)";
+		next_header.innerHTML = "Scheduled available next hour (" + (next_hour - 12) + 
+			":00PM - " + (next_hour -11) + ":00PM)";
+	} else if (current_hour == 22) {
+		current_header.innerHTML = "Scheduled available now (10:00PM - 11:00PM)";
+		next_header.innerHTML = "Scheduled available next hour (11:00PM - 12:00AM)";
+	//current_hour == 23
+	} else {
+		current_header.innerHTML = "Scheduled available now (11:00PM - 12:00AM)";
+		next_header.innerHTML = "Scheduled available next hour (12:00AM - 1:00AM)";
 	}
 
-	return true;
-}
-
-//Really lazy and messy set of ifs to output 12 hour time
-var current_header = document.getElementById("current_header");
-var next_header = document.getElementById("next_header");
-if (current_hour < 10 && current_hour != 0) {
-	current_header.innerHTML = "Scheduled available now (" + current_hour +
-		":00AM - " + next_hour + ":00 AM)";
-	next_header.innerHTML = "Scheduled available next hour (" + (current_hour+1) +
-		":00AM - " + (next_hour+1) + ":00 AM)";
-} else if (current_hour == 10) {
-	current_header.innerHTML = "Scheduled available now (10:00 AM - 11:00AM)";
-	next_header.innerHTML = "Scheduled available next hour (11:00AM - 12:00PM)";
-} else if (current_hour == 0) {
-	current_header.innerHTML = "Scheduled available now (12:00 AM - 1:00AM)";
-	next_header.innerHTML = "Scheduled available next hour (1:00AM - 2:00AM)";
-} else if (current_hour == 11) {
-	current_header.innerHTML = "Scheduled available now (11:00AM - 12:00PM)";
-	next_header.innerHTML = "Scheduled available next hour (12:00PM - 1:00PM)";
-} else if (current_hour == 12) {
-	current_header.innerHTML = "Scheduled available now (12:00PM - 1:00PM)";
-	next_header.innerHTML = "Scheduled available next hour (1:00PM - 2:00PM)";
-} else if (12 < current_hour && current_hour < 22) {
-	current_header.innerHTML = "Scheduled available now (" + (current_hour - 12) +
-		":00PM - " + (next_hour -12) + ":00PM)";
-	next_header.innerHTML = "Scheduled available next hour (" + (next_hour - 12) + 
-		":00PM - " + (next_hour -11) + ":00PM)";
-} else if (current_hour == 22) {
-	current_header.innerHTML = "Scheduled available now (10:00PM - 11:00PM)";
-	next_header.innerHTML = "Scheduled available next hour (11:00PM - 12:00AM)";
-//current_hour == 23
-} else {
-	current_header.innerHTML = "Scheduled available now (11:00PM - 12:00AM)";
-	next_header.innerHTML = "Scheduled available next hour (12:00AM - 1:00AM)";
-}
-
-//Loop to add currently available classrooms to current_table in page.html.
-//First creates local variable for the "current hour" table
-//Then loops through the classrooms array and runs open_at_time
-//on each element to check for open. If open then adds to table
-//next hour loop below is simlar
-var current_table = document.getElementById("current_table");
-var size = classrooms.length;
-for(i = 0; i < size; i++) {
-	if (open_at_time(current_hour, i)) {
-		var row = current_table.insertRow(1);
-		var cell = row.insertCell(0);
-		cell.innerHTML = classrooms[i].building + " " + classrooms[i].room;
+	//Loop to add currently available classrooms to current_table in page.html.
+	//First creates local variable for the "current hour" table
+	//Then loops through the classrooms array and runs open_at_time
+	//on each element to check for open. If open then adds to table
+	//next hour loop below is simlar
+	var current_table = document.getElementById("current_table");
+	var size_classrooms = classrooms.length;
+	for (i = 0; i < size_classrooms; ++i) {
+		if (open_at_time(current_hour, i)) {
+			var row = current_table.insertRow(1);
+			var cell = row.insertCell(0);
+			cell.innerHTML = classrooms[i].building + " " + classrooms[i].room;
+		}
 	}
-}
 
-//Loop to add next available classrooms to next_table in page.html
-var next_table = document.getElementById("next_table");
-var size = classrooms.length;
-for(i = 0; i < size; i++) {
-	if (open_at_time(next_hour, i)) {
-		var row = next_table.insertRow(1);
-		var cell = row.insertCell(0);
-		cell.innerHTML = classrooms[i].building + " " + classrooms[i].room;
+	//Loop to add next available classrooms to next_table in page.html
+	var next_table = document.getElementById("next_table");
+	for(i = 0; i < size_classrooms; ++i) {
+		if (open_at_time(next_hour, i)) {
+			var row = next_table.insertRow(1);
+			var cell = row.insertCell(0);
+			cell.innerHTML = classrooms[i].building + " " + classrooms[i].room;
+		}
 	}
-}
 }
