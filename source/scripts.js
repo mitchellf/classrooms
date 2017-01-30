@@ -1,3 +1,4 @@
+document.onload = function() {
 /*
  * classrooms array
  *
@@ -12,7 +13,7 @@
  *So if we had times[3] = [8,17] that would correspond to
  *the classroom being open on wednesday at 8AM and 5PM. 
  *We use an empty subarray to denote the classroom being
- *open the entire day.
+ *used from 8AM to 6PM.
  *
  * We also consider all classrooms to be open after 6PM
  * and do not store those times.
@@ -100,8 +101,8 @@ function open_at_time(time, index) {
 }
 
 //Really lazy and messy set of ifs to output 12 hour time
-current_header = document.getElementById("current_header");
-next_header = document.getElementById("next_header");
+var current_header = document.getElementById("current_header");
+var next_header = document.getElementById("next_header");
 if (current_hour < 10 && current_hour != 0) {
 	current_header.innerHTML = "Scheduled available now (" + current_hour +
 		":00AM - " + next_hour + ":00 AM)";
@@ -132,6 +133,7 @@ if (current_hour < 10 && current_hour != 0) {
 	current_header.innerHTML = "Scheduled available now (11:00PM - 12:00AM)";
 	next_header.innerHTML = "Scheduled available next hour (12:00AM - 1:00AM)";
 }
+
 //Loop to add currently available classrooms to current_table in page.html.
 //First creates local variable for the "current hour" table
 //Then loops through the classrooms array and runs open_at_time
@@ -156,4 +158,5 @@ for(i = 0; i < size; i++) {
 		var cell = row.insertCell(0);
 		cell.innerHTML = classrooms[i].building + " " + classrooms[i].room;
 	}
+}
 }
