@@ -12,7 +12,7 @@
  *So if we had times[3] = [8,17] that would correspond to
  *the classroom being open on wednesday at 8AM and 5PM. 
  *We use an empty subarray to denote the classroom being
- *used from 8AM to 6PM.
+ *in use from 8AM to 6PM.
  *
  * We also consider all classrooms to be open after 6PM
  * and do not store those times.
@@ -30,16 +30,20 @@ var classrooms = [
 	[[],[8,17],[17],[17],[16,17],[8,17],[]]},
 {building: "MS", room: "5138", times:
 	[[],[8,15],[17],[8,15,17],[],[8,15],[]]},
-{building: "MS", room: "5127", times:
-	[[],[17],[17],[],[],[16,17],[]]},
 {building: "MS", room: "5147", times:
 	[[],[8,16,17],[],[8],[],[8],[]]},
 {building: "MS", room: "5148", times:
 	[[],[8,11,12],[8,13,17],[11,12],[],[8,11,12],[]]},
 {building: "MS", room: "5217", times:
 	[[],[8,9,10,11,12,15],[],[],[8,17],[15,16,17],[]]},
+{building: "MS", room: "5203", times:
+	[[],[8,12,15],[11,17],[12],[13,17],[8,12],[]]},
+{building: "MS", room: "5225", times:
+	[[],[8,9,13,17],[8,17],[],[8,9],[16,17],[]]},
 {building: "MS", room: "6627", times:
 	[[],[9,15,16,17],[8,13,14,15,16,17],[9,15,17],[9,13,15,16,17],[9,16,17],[]]},
+{building: "MS", room: "6229", times:
+	[[],[8,17],[16,17],[],[],[8,17],[]]},
 {building: "Geology", room: "4645", times:
 	[[],[8,16],[15,17],[],[17],[8],[]]},
 {building: "Geology", room: "3656", times:
@@ -137,22 +141,30 @@ window.onload = function() {
 	//on each element to check for open. If open then adds to table
 	//next hour loop below is simlar
 	var current_table = document.getElementById("current_table");
+	var next_table = document.getElementById("next_table");
 	var size_classrooms = classrooms.length;
 	for (i = 0; i < size_classrooms; ++i) {
-		if (open_at_time(current_hour, i)) {
+		//Check if open this AND next hour, text underline if so. Can probably handle this
+		//in a nicer way
+		if (open_at_time(current_hour,i) && open_at_time(next_hour,i)) {
 			var row = current_table.insertRow(1);
 			var cell = row.insertCell(0);
-			cell.innerHTML = classrooms[i].building + " " + classrooms[i].room;
-		}
-	}
+			cell.innerHTML = "<ins>" +  classrooms[i].building + " " + classrooms[i].room + "</ins>";
 
-	//Loop to add next available classrooms to next_table in page.html
-	var next_table = document.getElementById("next_table");
-	for(i = 0; i < size_classrooms; ++i) {
-		if (open_at_time(next_hour, i)) {
 			var row = next_table.insertRow(1);
 			var cell = row.insertCell(0);
-			cell.innerHTML = classrooms[i].building + " " + classrooms[i].room;
+			cell.innerHTML = "<ins>" + classrooms[i].building + " " + classrooms[i].room + "</ins";
+		} else {		
+			if (open_at_time(current_hour, i)) {
+				var row = current_table.insertRow(1);
+				var cell = row.insertCell(0);
+				cell.innerHTML = classrooms[i].building + " " + classrooms[i].room;
+			}
+			if (open_at_time(next_hour, i)) {
+				var row = next_table.insertRow(1);
+				var cell = row.insertCell(0);
+				cell.innerHTML = classrooms[i].building + " " + classrooms[i].room;
+			}
 		}
 	}
 }
